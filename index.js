@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js"
-import { getDatabase } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js"
+import { getDatabase, ref, push} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js"
 
  const firebaseConfig = {
     apiKey: "AIzaSyCBaOLkboY1i_wRqH3Pj5oq_owXoEa0Lp0",
@@ -7,11 +7,13 @@ import { getDatabase } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-
     projectId: "leads-tracker-app-bd1e1",
     storageBucket: "leads-tracker-app-bd1e1.firebasestorage.app",
     messagingSenderId: "106504984391",
-    appId: "1:106504984391:web:49f092ff4c80596a841e62"
+    appId: "1:106504984391:web:49f092ff4c80596a841e62",
+    databaseURL: "https://leads-tracker-app-bd1e1-default-rtdb.asia-southeast1.firebasedatabase.app"
   };
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app)
+const referenceInDB = ref(database, "leads")
 
 console.log(firebaseConfig)
 
@@ -39,7 +41,7 @@ deleteBtn.addEventListener("dblclick", function() {
 })
 
 inputBtn.addEventListener("click", function() {
-    console.log(inputEl.value)
+    push(referenceInDB, inputEl.value)
     inputEl.value = ""
     
 })
