@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js"
-import { getDatabase, ref, push} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js"
+import { getDatabase, ref, push, onValue, remove} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js"
 
  const firebaseConfig = {
     apiKey: "AIzaSyCBaOLkboY1i_wRqH3Pj5oq_owXoEa0Lp0",
@@ -22,6 +22,15 @@ const inputBtn = document.getElementById("input-btn")
 const ulEl = document.getElementById("ul-el")
 const deleteBtn = document.getElementById("delete-btn")
 
+onValue(referenceInDB, function(snapshot) {
+    const snapShotDoesExist = snapshot.exists()
+    if (snapShotDoesExist) {
+        const data = snapshot.val()
+        const leads = Object.values(data)
+        render(leads)
+    } 
+})
+
 function render(leads) {
     let listItems = ""
     for (let i = 0; i < leads.length; i++) {
@@ -37,7 +46,8 @@ function render(leads) {
 }
 
 deleteBtn.addEventListener("dblclick", function() {
-    
+    remove(referenceInDB)
+    ulEl.innerHTML = ""
 })
 
 inputBtn.addEventListener("click", function() {
