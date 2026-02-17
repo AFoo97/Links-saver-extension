@@ -8,28 +8,17 @@ import { getDatabase, ref, push, onValue, remove} from "https://www.gstatic.com/
     storageBucket: "leads-tracker-app-bd1e1.firebasestorage.app",
     messagingSenderId: "106504984391",
     appId: "1:106504984391:web:49f092ff4c80596a841e62",
-    databaseURL: "https://leads-tracker-app-bd1e1-default-rtdb.asia-southeast1.firebasedatabase.app"
+    databaseURL: "https://leads-tracker-app-bd1e1-default-rtdb.asia-southeast1.firebasedatabase.app/"
   };
 
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig)
 const database = getDatabase(app)
 const referenceInDB = ref(database, "leads")
-
-console.log(firebaseConfig)
 
 const inputEl = document.getElementById("input-el")
 const inputBtn = document.getElementById("input-btn")
 const ulEl = document.getElementById("ul-el")
 const deleteBtn = document.getElementById("delete-btn")
-
-onValue(referenceInDB, function(snapshot) {
-    const snapShotDoesExist = snapshot.exists()
-    if (snapShotDoesExist) {
-        const data = snapshot.val()
-        const leads = Object.values(data)
-        render(leads)
-    } 
-})
 
 function render(leads) {
     let listItems = ""
@@ -45,6 +34,15 @@ function render(leads) {
     ulEl.innerHTML = listItems
 }
 
+onValue(referenceInDB, function(snapshot) {
+    const snapshotDoesExist = snapshot.exists()
+    if (snapshotDoesExist) {
+        const snapshotValues = snapshot.val()
+        const leads = Object.values(snapshotValues)
+        render(leads)
+    }
+})
+
 deleteBtn.addEventListener("dblclick", function() {
     remove(referenceInDB)
     ulEl.innerHTML = ""
@@ -52,6 +50,5 @@ deleteBtn.addEventListener("dblclick", function() {
 
 inputBtn.addEventListener("click", function() {
     push(referenceInDB, inputEl.value)
-    inputEl.value = ""
-    
+    inputEl.value = "" 
 })
